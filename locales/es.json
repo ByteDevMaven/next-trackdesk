@@ -1,0 +1,123 @@
+{
+    "Common": {
+        "status": {
+            "name": "Estado",
+            "all": "Todos",
+            "open": "Abierto",
+            "closed": "Cerrado",
+            "pending": "Pendiente"
+        },
+        "priority": {
+            "name": "Prioridad",
+            "all": "Todas",
+            "low": "Baja",
+            "med": "Media",
+            "high": "Alta"
+        }
+    },
+    "LoginPage": {
+        "missingAlias": "Falta el parámetro alias en la URL",
+        "authFailed": "Autenticación fallida",
+        "loginFailed": "Error al iniciar sesión. Por favor, inténtalo de nuevo.",
+        "description": "Ingresa tus credenciales para acceder a tu cuenta",
+        "alertAlias": "Falta el parámetro alias. Por favor, inclúyelo en la URL (ej., ?alias=tuempresa)",
+        "form": {
+            "email": "Correo electrónico",
+            "password": "Contraseña",
+            "signin": "Iniciar sesión",
+            "loading": "Iniciando sesión..."
+        },
+        "alias": "Alias de la empresa",
+        "nullAlias": "No proporcionado"
+    },
+    "Sidebar": {
+        "dashboard": "Panel",
+        "tickets": "Tickets",
+        "customers": "Clientes",
+        "settings": "Configuración"
+    },
+    "Signout": {
+        "loading": "Cerrando sesión...",
+        "title": "Cerrar sesión"
+    },
+    "DashboardPage": {
+        "title": "Panel",
+        "welcome": "¡Bienvenido, {name}!"
+    },
+    "TicketsPage": {
+        "title": "Tickets",
+        "description": "Gestiona tus tickets y solicitudes de soporte",
+        "newTicket": "Nuevo Ticket",
+        "ticketsfound": "Tickets encontrados.",
+        "ticketsnotfound": "No se encontraron tickets.",
+        "table": {
+            "id": "ID",
+            "title": "Título",
+            "customer": "Cliente",
+            "assignee": "Asignado a",
+            "status": "Estado",
+            "priority": "Prioridad",
+            "created": "Creado",
+            "actions": "Acciones"
+        }
+    },
+    "TicketModal": {
+        "new": "Crear nuevo ticket",
+        "edit": "Editar ticket",
+        "title": "Título",
+        "titlePlaceholder": "Introduce el título del ticket",
+        "customer": "Cliente",
+        "assignee": "Asignado a",
+        "tags": "Etiquetas",
+        "tagsPlaceholder": "Introduce etiquetas separadas por comas",
+        "cancel": "Cancelar",
+        "button": {
+            "create": "Crear ticket",
+            "update": "Actualizar ticket",
+            "submit": {
+                "create": "Creando...",
+                "update": "Actualizando..."
+            }
+        }
+    },
+    "CustomersHeader": {
+        "title": "Clientes",
+        "description": "Gestiona tus clientes y su información",
+        "addCustomer": "Agregar cliente",
+        "search": "Buscar",
+        "searchPlaceholder": "Buscar clientes..."
+    },
+    "CustomersPage": {
+        "table": {
+            "id": "ID",
+            "name": "Nombre",
+            "email": "Correo electrónico",
+            "phone": "Teléfono",
+            "actions": "Acciones"
+        },
+        "empty": "No se encontraron clientes.",
+        "emptySearch": "No se encontraron clientes que coincidan con tu búsqueda.",
+        "edit": "Editar",
+        "view": "Ver"
+    },
+    "CustomerModal": {
+        "new": "Crear nuevo cliente",
+        "edit": "Editar cliente",
+        "title": "Título",
+        "name": "Nombre completo",
+        "namePlaceholder": "Introduce el nombre del cliente",
+        "email": "Correo electrónico",
+        "emailPlaceholder": "Introduce el correo electrónico del cliente",
+        "phone": "Teléfono",
+        "phonePlaceholder": "Introduce el número de teléfono del cliente",
+        "cancel": "Cancelar",
+        "button": {
+            "create": "Agregar cliente",
+            "update": "Actualizar cliente",
+            "submit": {
+                "create": "Creando...",
+                "update": "Actualizando..."
+            }
+        }
+    }
+}

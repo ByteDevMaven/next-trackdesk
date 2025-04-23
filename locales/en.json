@@ -1,0 +1,123 @@
+{
+    "Common": {
+        "status": {
+            "name": "Status",
+            "all": "All",
+            "open": "Open",
+            "closed": "Closed",
+            "pending": "Pending"
+        },
+        "priority": {
+            "name": "Priority",
+            "all": "All",
+            "low": "Low",
+            "med": "Medium",
+            "high": "High"
+        }
+    },
+    "LoginPage": {
+        "missingAlias": "Alias parameter is missing from the URL",
+        "authFailed": "Authentication failed",
+        "loginFailed": "Login failed. Please try again.",
+        "description": "Enter your credentials to access your account",
+        "alertAlias": "Alias parameter is missing. Please include it in the URL (e.g., ?alias=yourcompany)",
+        "form": {
+            "email": "Email",
+            "password": "Password",
+            "signin": "Sign in",
+            "loading": "Signing in..."
+        },
+        "alias": "Company alias",
+        "nullAlias": "Not provided"
+    },
+    "Sidebar": {
+        "dashboard": "Dashboard",
+        "tickets": "Tickets",
+        "customers": "Customers",
+        "settings": "Settings"
+    },
+    "Signout": {
+        "loading": "Signing out...",
+        "title": "Sign out"
+    },
+    "DashboardPage": {
+        "title": "Dashboard",
+        "welcome": "Welcome back, {name}!"
+    },
+    "TicketsPage": {
+        "title": "Tickets",
+        "description": "Manage your tickets and support requests",
+        "newTicket": "New Ticket",
+        "ticketsfound": "Tickets Found.",
+        "ticketsnotfound": "No tickets found.",
+        "table": {
+            "id": "ID",
+            "title": "Title",
+            "customer": "Customer",
+            "assignee": "Assignee",
+            "status": "Status",
+            "priority": "Priority",
+            "created": "Created",
+            "actions": "Actions"
+        }
+    },
+    "TicketModal": {
+        "new": "Create New Ticket",
+        "edit": "Edit Ticket",
+        "title": "Title",
+        "titlePlaceholder": "Enter ticket title",
+        "customer": "Customer",
+        "assignee": "Assignee",
+        "tags": "Tags",
+        "tagsPlaceholder": "Enter tags separated by commas",
+        "cancel": "Cancel",
+        "button": {
+            "create": "Create Ticket",
+            "update": "Update Ticket",
+            "submit": {
+                "create": "Creating...",
+                "update": "Updating..."
+            }
+        }
+    },
+    "CustomersHeader": {
+        "title": "Customers",
+        "description": "Manage your customers and their information",
+        "addCustomer": "Add Customer",
+        "search": "Search",
+        "searchPlaceholder": "Search customers..."
+    },
+    "CustomersPage": {
+        "table": {
+            "id": "ID",
+            "name": "Name",
+            "email": "Email",
+            "phone": "Phone",
+            "actions": "Actions"
+        },
+        "empty": "No customers found.",
+        "emptySearch": "No customers found matching your search.",
+        "edit": "Edit",
+        "view": "View"
+    },
+    "CustomerModal": {
+        "new": "Create New Customer",
+        "edit": "Edit Customer",
+        "title": "Title",
+        "name": "Full Name",
+        "namePlaceholder": "Enter customer name",
+        "email": "Email",
+        "emailPlaceholder": "Enter customer email",
+        "phone": "Phone",
+        "phonePlaceholder": "Enter customer phone number",
+        "cancel": "Cancel",
+        "button": {
+            "create": "Add Customer",
+            "update": "Update Customer",
+            "submit": {
+                "create": "Creating...",
+                "update": "Updating..."
+            }
+        }
+    }
+}

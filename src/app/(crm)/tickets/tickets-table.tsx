@@ -19,22 +19,26 @@ import { Button } from "@/components/ui/button"
 import { Edit } from "lucide-react"
 import { TicketDetails } from "./ticket-details"
 import { TicketModal } from "./ticket-modal"
-import type { Settings, Ticket, User, PaginatedResponse } from "@/lib/api"
+import type { Ticket, User, PaginatedResponse } from "@/lib/api"
+import { useSettings } from '@/lib/settings-context';
+import { useTranslations } from 'next-intl'
 
 interface TicketsTableProps {
     tickets: PaginatedResponse<Ticket>
     currentPage: number
-    settings: Settings
     user: User
 }
 
-export function TicketsTable({ tickets: initialTickets, currentPage, settings, user }: TicketsTableProps) {
+export function TicketsTable({ tickets: initialTickets, currentPage, user }: TicketsTableProps) {
     const [tickets, setTickets] = useState<PaginatedResponse<Ticket>>(initialTickets)
     const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null)
     const [isDetailsOpen, setIsDetailsOpen] = useState(false)
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [statusFilter, setStatusFilter] = useState<string>("all")
     const [priorityFilter, setPriorityFilter] = useState<string>("all")
+    const { settings } = useSettings();
+    const t = useTranslations('TicketsPage');
+    const tCommon = useTranslations('Common');
 
     // Update tickets when initialTickets changes (e.g., page change)
     useEffect(() => {
@@ -79,8 +83,8 @@ export function TicketsTable({ tickets: initialTickets, currentPage, settings, u
         }
     }, [selectedTicket])
 
-    const statusOptions = ["all", ...settings.status.split(",")]
-    const priorityOptions = ["all", ...settings.priority.split(",")]
+    const statusOptions = ["all", ...(settings?.status?.split(",") || [])]
+    const priorityOptions = ["all", ...(settings?.priority?.split(",") || [])]
 
     // Filter tickets based on selected filters
     const filteredTickets = tickets.data.filter((ticket) => {
@@ -96,7 +100,7 @@ export function TicketsTable({ tickets: initialTickets, currentPage, settings, u
             case "high":
                 return "destructive"
             case "med":
-                return "warning"
+                return "outline"
             case "low":
                 return "secondary"
             default:
@@ -109,7 +113,7 @@ export function TicketsTable({ tickets: initialTickets, currentPage, settings, u
             case "open":
                 return "default"
             case "pending":
-                return "warning"
+                return "outline"
             case "closed":
                 return "secondary"
             default:
@@ -151,14 +155,13 @@ export function TicketsTable({ tickets: initialTickets, currentPage, settings, u
     return (
         <>
             <div className="mb-4">
-                <h2 className="text-lg font-semibold">Ticket List</h2>
-                <p className="text-sm text-muted-foreground">{tickets.total} tickets found</p>
+                <p className="text-sm text-muted-foreground">{tickets.total} {t('ticketsfound')}</p>
             </div>
 
             <div className="flex flex-col gap-4">
                 <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                     <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium">Status:</span>
+                        <span className="text-sm font-medium">{tCommon('status.name')}:</span>
                         <Select value={statusFilter} onValueChange={setStatusFilter}>
                             <SelectTrigger className="w-[180px]">
                                 <SelectValue placeholder="Filter by status" />
@@ -166,14 +169,14 @@ export function TicketsTable({ tickets: initialTickets, currentPage, settings, u
                             <SelectContent>
                                 {statusOptions.map((status) => (
                                     <SelectItem key={status} value={status}>
-                                        {status.charAt(0).toUpperCase() + status.slice(1)}
+                                        {tCommon(`status.${status}`)}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
                     </div>
                     <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium">Priority:</span>
+                        <span className="text-sm font-medium">{tCommon('priority.name')}:</span>
                         <Select value={priorityFilter} onValueChange={setPriorityFilter}>
                             <SelectTrigger className="w-[180px]">
                                 <SelectValue placeholder="Filter by priority" />
@@ -181,7 +184,7 @@ export function TicketsTable({ tickets: initialTickets, currentPage, settings, u
                             <SelectContent>
                                 {priorityOptions.map((priority) => (
                                     <SelectItem key={priority} value={priority}>
-                                        {priority.charAt(0).toUpperCase() + priority.slice(1)}
+                                        {tCommon(`priority.${priority}`)}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
@@ -193,21 +196,21 @@ export function TicketsTable({ tickets: initialTickets, currentPage, settings, u
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="w-[80px]">ID</TableHead>
-                                <TableHead>Title</TableHead>
-                                <TableHead>Customer</TableHead>
-                                <TableHead>Assignee</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead>Priority</TableHead>
-                                <TableHead>Created</TableHead>
-                                <TableHead className="w-[80px]">Actions</TableHead>
+                                <TableHead className="w-[80px]">{t('table.id')}</TableHead>
+                                <TableHead>{t('table.title')}</TableHead>
+                                <TableHead>{t('table.customer')}</TableHead>
+                                <TableHead>{t('table.assignee')}</TableHead>
+                                <TableHead>{t('table.status')}</TableHead>
+                                <TableHead>{t('table.priority')}</TableHead>
+                                <TableHead>{t('table.created')}</TableHead>
+                                <TableHead className="w-[80px]">{t('table.actions')}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {filteredTickets.length === 0 ? (
                                 <TableRow>
                                     <TableCell colSpan={8} className="h-24 text-center">
-                                        No tickets found.
+                                        {t('ticketsnotfound')}
                                     </TableCell>
                                 </TableRow>
                             ) : (
@@ -226,10 +229,10 @@ export function TicketsTable({ tickets: initialTickets, currentPage, settings, u
                                         </TableCell>
                                         <TableCell>{ticket.user ? ticket.user.name : `User #${ticket.user_id}`}</TableCell>
                                         <TableCell>
-                                            <Badge variant={getStatusBadgeVariant(ticket.status)}>{ticket.status}</Badge>
+                                            <Badge variant={getStatusBadgeVariant(ticket.status)}>{tCommon(`status.${ticket.status}`)}</Badge>
                                         </TableCell>
                                         <TableCell>
-                                            <Badge variant={getPriorityBadgeVariant(ticket.priority)}>{ticket.priority}</Badge>
+                                            <Badge variant={getPriorityBadgeVariant(ticket.priority)}>{tCommon(`priority.${ticket.priority}`)}</Badge>
                                         </TableCell>
                                         <TableCell>{format(new Date(ticket.created_at), "MMM d, yyyy")}</TableCell>
                                         <TableCell>

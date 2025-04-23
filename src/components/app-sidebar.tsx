@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation"
 import { Settings, Ticket, Home, Users, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { useTranslations } from 'next-intl'
 
 type NavItem = {
     title: string
@@ -14,31 +15,33 @@ type NavItem = {
     icon: React.ElementType
 }
 
-const navItems: NavItem[] = [
-    {
-        title: "Dashboard",
-        href: "/",
-        icon: Home,
-    },
-    {
-        title: "Tickets",
-        href: "/tickets",
-        icon: Ticket,
-    },
-    {
-        title: "Customers",
-        href: "/customers",
-        icon: Users,
-    },
-    {
-        title: "Settings",
-        href: "/settings",
-        icon: Settings,
-    },
-]
-
 export function AppSidebar() {
     const pathname = usePathname()
+
+    const t = useTranslations('Sidebar');
+
+    const navItems: NavItem[] = [
+        {
+            title: t('dashboard'),
+            href: "/dashboard",
+            icon: Home,
+        },
+        {
+            title: t('tickets'),
+            href: "/tickets",
+            icon: Ticket,
+        },
+        {
+            title: t('customers'),
+            href: "/customers",
+            icon: Users,
+        },
+        {
+            title: t('settings'),
+            href: "/settings",
+            icon: Settings,
+        },
+    ]
 
     return (
         <>

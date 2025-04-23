@@ -89,7 +89,7 @@ export type Settings = {
     priority: string
     type: string
     status: string
-    tags: string
+    titles: string
     modules: string
 }
 
@@ -143,12 +143,17 @@ export async function fetchTickets(
     page = 1,
     limit = 10,
     userId?: number,
+    ticketId?: number
 ): Promise<PaginatedResponse<Ticket>> {
     let url = `https://script.google.com/macros/s/AKfycbyb-rUF-dPBjWyYZobtChUaRC4ppv0IU_UKTeNTI1Af3msJIUeaxbzzKDVGFt0mfZv-/exec?alias=${alias}&sheet=tickets&limit=${limit}&page=${page}&sort_by=id&order=desc&key=74792ffbf37a3ddcb4dff279c7ef7ffc`
 
     // If userId is provided, only fetch tickets assigned to this user
     if (userId) {
         url += `&user_id=${userId}` // Updated from assignee to user_id
+    }
+
+    if (ticketId) {
+        url += `&id=${ticketId}`
     }
 
     const response = await fetch(url, { cache: "no-store" })

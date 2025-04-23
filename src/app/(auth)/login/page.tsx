@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
+import { useTranslations } from 'next-intl'
 
 export default function LoginPage() {
     const [email, setEmail] = useState("")
@@ -21,12 +22,13 @@ export default function LoginPage() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const alias = searchParams.get("alias") || ""
+    const t = useTranslations('LoginPage')
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
 
         if (!alias) {
-            setError("Alias parameter is missing from the URL")
+            setError(t("missingAlias"))
             return
         }
 
@@ -45,27 +47,27 @@ export default function LoginPage() {
             const data = await response.json()
 
             if (!response.ok) {
-                throw new Error(data.message || "Authentication failed")
+                throw new Error(data.message || t("authFailed"))
             }
 
             // Redirect to dashboard on successful login
             router.push("/dashboard")
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Login failed. Please try again.")
+            setError(err instanceof Error ? err.message : t("loginFailed"))
         } finally {
             setLoading(false)
         }
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
+        <div className="min-h-screen flex items-center justify-center bg-background text-foreground p-4">
             <Card className="w-full max-w-md">
                 <CardHeader className="space-y-1 flex flex-col items-center">
                     <div className="w-16 h-16 mb-4 relative">
-                        <Image src="/trackdesk.jpg" alt="TrackDesk Logo" fill className="object-contain" />
+                        <Image src="/trackdesk.webp" alt="TrackDesk Logo" fill className="object-contain" />
                     </div>
                     <CardTitle className="text-2xl font-bold text-center">TrackDesk</CardTitle>
-                    <CardDescription className="text-center">Enter your credentials to access your account</CardDescription>
+                    <CardDescription className="text-center">{t("description")}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     {error && (
@@ -79,14 +81,14 @@ export default function LoginPage() {
                         <Alert variant="destructive" className="mb-4">
                             <AlertCircle className="h-4 w-4" />
                             <AlertDescription>
-                                Alias parameter is missing. Please include it in the URL (e.g., ?alias=yourcompany)
+                            {t("alertAlias")}
                             </AlertDescription>
                         </Alert>
                     )}
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="email">Email</Label>
+                            <Label htmlFor="email">{t("form.email")}</Label>
                             <Input
                                 id="email"
                                 type="email"
@@ -97,7 +99,7 @@ export default function LoginPage() {
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="password">Password</Label>
+                            <Label htmlFor="password">{t("form.password")}</Label>
                             <Input
                                 id="password"
                                 type="password"
@@ -107,13 +109,13 @@ export default function LoginPage() {
                             />
                         </div>
                         <Button type="submit" className="w-full" disabled={loading}>
-                            {loading ? "Signing in..." : "Sign in"}
+                            {loading ? t("form.loading") : t("form.signin")}
                         </Button>
                     </form>
                 </CardContent>
                 <CardFooter className="flex justify-center">
                     <p className="text-sm text-muted-foreground">
-                        Company alias: <span className="font-medium">{alias || "Not provided"}</span>
+                        {t("alias")}: <span className="font-medium">{alias || t("nullAlias")}</span>
                     </p>
                 </CardFooter>
             </Card>

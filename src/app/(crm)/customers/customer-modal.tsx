@@ -13,6 +13,8 @@ import { useToast } from "@/components/ui/use-toast"
 import { addCustomer, updateCustomer } from "@/lib/api"
 import { getUser } from "@/lib/client-auth"
 import type { Customer, User } from "@/lib/api"
+import { useSettings } from '@/lib/settings-context';
+import { useTranslations } from "next-intl"
 
 interface CustomerModalProps {
     customer?: Customer | null
@@ -34,6 +36,10 @@ export function CustomerModal({ customer, isOpen, onClose, mode }: CustomerModal
     const [currentUser, setCurrentUser] = useState<User>()
     const { toast } = useToast()
     const router = useRouter()
+    const { settings } = useSettings();
+    const t = useTranslations('CustomerModal');
+
+    const titleOptions = ["N/A", ...(settings?.titles?.split(",") || [])]
 
     // Fetch the current user when the component mounts
     useEffect(() => {
@@ -106,25 +112,23 @@ export function CustomerModal({ customer, isOpen, onClose, mode }: CustomerModal
         }
     }
 
-    const titles = ["Mr.", "Mrs.", "Ms.", "Dr.", "Prof."]
-
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
             <DialogContent className="max-w-md">
                 <DialogHeader>
-                    <DialogTitle>{mode === "add" ? "Add New Customer" : "Edit Customer"}</DialogTitle>
+                    <DialogTitle>{mode === "add" ? t('new') : t('edit')}</DialogTitle>
                 </DialogHeader>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="title">Title</Label>
+                            <Label htmlFor="title">{t('title')}</Label>
                             <Select value={formData.title} onValueChange={(value) => handleChange("title", value)}>
                                 <SelectTrigger id="title">
                                     <SelectValue placeholder="Select title" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {titles.map((title) => (
+                                    {titleOptions.map((title) => (
                                         <SelectItem key={title} value={title}>
                                             {title}
                                         </SelectItem>
@@ -134,35 +138,35 @@ export function CustomerModal({ customer, isOpen, onClose, mode }: CustomerModal
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="name">Full Name</Label>
+                            <Label htmlFor="name">{t('name')}</Label>
                             <Input
                                 id="name"
                                 value={formData.name}
                                 onChange={(e) => handleChange("name", e.target.value)}
-                                placeholder="John Doe"
+                                placeholder={t('namePlaceholder')}
                                 required
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="email">Email</Label>
+                            <Label htmlFor="email">{t('email')}</Label>
                             <Input
                                 id="email"
                                 type="email"
                                 value={formData.email}
                                 onChange={(e) => handleChange("email", e.target.value)}
-                                placeholder="john.doe@example.com"
+                                placeholder={t('emailPlaceholder')}
                                 required
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="phone">Phone</Label>
+                            <Label htmlFor="phone">{t('phone')}</Label>
                             <Input
                                 id="phone"
                                 value={formData.phone}
                                 onChange={(e) => handleChange("phone", e.target.value)}
-                                placeholder="+1234567890"
+                                placeholder={t('phonePlaceholder')}
                                 required
                             />
                         </div>
@@ -170,16 +174,16 @@ export function CustomerModal({ customer, isOpen, onClose, mode }: CustomerModal
 
                     <DialogFooter>
                         <Button type="button" variant="outline" onClick={onClose}>
-                            Cancel
+                        {t('cancel')}
                         </Button>
                         <Button type="submit" disabled={isSubmitting}>
                             {isSubmitting
                                 ? mode === "add"
-                                    ? "Adding..."
-                                    : "Updating..."
+                                    ? t('button.submit.create')
+                                    : t('button.submit.update')
                                 : mode === "add"
-                                    ? "Add Customer"
-                                    : "Update Customer"}
+                                    ? t('button.create')
+                                    : t('button.update')}
                         </Button>
                     </DialogFooter>
                 </form>

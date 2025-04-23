@@ -5,10 +5,12 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { LogOut } from "lucide-react"
 import { clearUserCache } from "@/lib/client-auth"
+import { useTranslations } from 'next-intl'
 
 export function LogoutButton() {
     const [isLoggingOut, setIsLoggingOut] = useState(false)
     const router = useRouter()
+    const t = useTranslations('Signout');
 
     async function handleLogout() {
         setIsLoggingOut(true)
@@ -38,11 +40,11 @@ export function LogoutButton() {
     return (
         <Button variant="outline" size="sm" onClick={handleLogout} disabled={isLoggingOut}>
             {isLoggingOut ? (
-                "Signing out..."
+                t('loading')
             ) : (
                 <>
                     <LogOut className="h-4 w-4 mr-2" />
-                    Sign out
+                    {t('title')}
                 </>
             )}
         </Button>

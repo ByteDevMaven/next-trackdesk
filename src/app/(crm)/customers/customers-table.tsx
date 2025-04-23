@@ -15,6 +15,7 @@ import { Edit, Eye, Mail, Phone } from "lucide-react"
 import { CustomerModal } from "./customer-modal"
 import { CustomerDetailModal } from "./customer-detail-modal"
 import type { PaginatedResponse, Customer, User } from "@/lib/api"
+import { useTranslations } from "next-intl"
 
 interface CustomersTableProps {
     customers: PaginatedResponse<Customer>
@@ -27,6 +28,7 @@ export function CustomersTable({ customers, currentPage, search }: CustomersTabl
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null)
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
+    const t = useTranslations('CustomersPage');
 
     const totalPages = Math.ceil(customers.total / customers.per_page)
 
@@ -46,18 +48,18 @@ export function CustomersTable({ customers, currentPage, search }: CustomersTabl
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="w-[80px]">ID</TableHead>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Email</TableHead>
-                            <TableHead>Phone</TableHead>
-                            <TableHead className="text-right">Actions</TableHead>
+                            <TableHead className="w-[80px]">{t('table.id')}</TableHead>
+                            <TableHead>{t('table.name')}</TableHead>
+                            <TableHead>{t('table.email')}</TableHead>
+                            <TableHead>{t('table.phone')}</TableHead>
+                            <TableHead className="text-right">{t('table.actions')}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {customers.data.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={5} className="h-24 text-center">
-                                    {search ? "No customers found matching your search." : "No customers found."}
+                                    {search ? t('emptySearch') : t('empty')}
                                 </TableCell>
                             </TableRow>
                         ) : (
@@ -86,11 +88,11 @@ export function CustomersTable({ customers, currentPage, search }: CustomersTabl
                                         <div className="flex justify-end gap-2">
                                             <Button variant="outline" size="sm" onClick={() => handleView(customer)}>
                                                 <Eye className="h-4 w-4" />
-                                                <span className="sr-only">View</span>
+                                                <span className="sr-only">{t('view')}</span>
                                             </Button>
                                             <Button variant="outline" size="sm" onClick={() => handleEdit(customer)}>
                                                 <Edit className="h-4 w-4" />
-                                                <span className="sr-only">Edit</span>
+                                                <span className="sr-only">{t('edit')}</span>
                                             </Button>
                                         </div>
                                     </TableCell>

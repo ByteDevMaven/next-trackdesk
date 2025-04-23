@@ -20,8 +20,12 @@ export async function POST(request: Request) {
 
         const data = await response.json()
 
+        if (!data.users) {
+            return NextResponse.json({ message: "Company not found" }, { status: 404 })
+        }
+
         // Check if user exists
-        if (!data.users || data.users.total === 0) {
+        if (data.users.total === 0) {
             return NextResponse.json({ message: "User not found" }, { status: 401 })
         }
 

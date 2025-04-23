@@ -12,6 +12,8 @@ import { useToast } from "@/components/ui/use-toast"
 import { addTicket, updateTicket, fetchCustomersForSelect, fetchUsersForSelect, createActivityEntry } from "@/lib/api"
 import { getUser } from "@/lib/client-auth"
 import type { Ticket, User } from "@/lib/api"
+import { useSettings } from '@/lib/settings-context';
+import { useTranslations } from 'next-intl'
 
 interface TicketModalProps {
     ticket?: Ticket | null
@@ -41,6 +43,12 @@ export function TicketModal({ ticket, isOpen, onClose, mode, onSuccess }: Ticket
     const [customers, setCustomers] = useState<{ id: number; label: string }[]>([])
     const [users, setUsers] = useState<{ id: number; label: string }[]>([])
     const { toast } = useToast()
+    const { settings } = useSettings();
+    const t = useTranslations('TicketModal');
+    const tCommon = useTranslations('Common');
+
+    const statusOptions = ["all", ...(settings?.status?.split(",") || [])]
+    const priorityOptions = ["all", ...(settings?.priority?.split(",") || [])]
 
     // Fetch the current user when the component mounts
     useEffect(() => {
@@ -171,54 +179,58 @@ export function TicketModal({ ticket, isOpen, onClose, mode, onSuccess }: Ticket
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
             <DialogContent className="max-w-md">
                 <DialogHeader>
-                    <DialogTitle>{mode === "add" ? "Create New Ticket" : "Edit Ticket"}</DialogTitle>
+                    <DialogTitle>{mode === "add" ? t('new') : t('edit')}</DialogTitle>
                 </DialogHeader>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="title">Title</Label>
+                            <Label htmlFor="title">{t('title')}</Label>
                             <Input
                                 id="title"
                                 value={formData.title}
                                 onChange={(e) => handleChange("title", e.target.value)}
-                                placeholder="Ticket title"
+                                placeholder={t('titlePlaceholder')}
                                 required
                             />
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label htmlFor="status">Status</Label>
+                                <Label htmlFor="status">{tCommon('status.name')}</Label>
                                 <Select value={formData.status} onValueChange={(value) => handleChange("status", value)}>
                                     <SelectTrigger id="status">
                                         <SelectValue placeholder="Select status" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="open">Open</SelectItem>
-                                        <SelectItem value="pending">Pending</SelectItem>
-                                        <SelectItem value="closed">Closed</SelectItem>
+                                        {statusOptions.map((status) => (
+                                            <SelectItem key={status} value={status}>
+                                                {tCommon(`status.${status}`)}
+                                            </SelectItem>
+                                        ))}
                                     </SelectContent>
                                 </Select>
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="priority">Priority</Label>
+                                <Label htmlFor="priority">{tCommon('priority.name')}</Label>
                                 <Select value={formData.priority} onValueChange={(value) => handleChange("priority", value)}>
                                     <SelectTrigger id="priority">
                                         <SelectValue placeholder="Select priority" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="low">Low</SelectItem>
-                                        <SelectItem value="med">Medium</SelectItem>
-                                        <SelectItem value="high">High</SelectItem>
+                                        {priorityOptions.map((priority) => (
+                                            <SelectItem key={priority} value={priority}>
+                                                {tCommon(`priority.${priority}`)}
+                                            </SelectItem>
+                                        ))}
                                     </SelectContent>
                                 </Select>
                             </div>
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="customer_id">Customer</Label>
+                            <Label htmlFor="customer_id">{t('customer')}</Label>
                             <Select
                                 value={formData.customer_id.toString()}
                                 onValueChange={(value) => handleChange("customer_id", Number.parseInt(value))}
@@ -237,7 +249,7 @@ export function TicketModal({ ticket, isOpen, onClose, mode, onSuccess }: Ticket
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="user_id">Assignee</Label>
+                            <Label htmlFor="user_id">{t('assignee')}</Label>
                             <Select
                                 value={formData.user_id.toString()}
                                 onValueChange={(value) => handleChange("user_id", Number.parseInt(value))}
@@ -256,28 +268,28 @@ export function TicketModal({ ticket, isOpen, onClose, mode, onSuccess }: Ticket
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="tags">Tags</Label>
+                            <Label htmlFor="tags">{t('tags')}</Label>
                             <Input
                                 id="tags"
                                 value={formData.tags}
                                 onChange={(e) => handleChange("tags", e.target.value)}
-                                placeholder="Comma-separated tags"
+                                placeholder={t('tagsPlaceholder')}
                             />
                         </div>
                     </div>
 
                     <DialogFooter>
                         <Button type="button" variant="outline" onClick={onClose}>
-                            Cancel
+                            {t('cancel')}
                         </Button>
                         <Button type="submit" disabled={isSubmitting}>
                             {isSubmitting
                                 ? mode === "add"
-                                    ? "Creating..."
-                                    : "Updating..."
+                                    ? t('button.submit.create')
+                                    : t('button.submit.update')
                                 : mode === "add"
-                                    ? "Create Ticket"
-                                    : "Update Ticket"}
+                                    ? t('button.create')
+                                    : t('button.update')}
                         </Button>
                     </DialogFooter>
                 </form>
